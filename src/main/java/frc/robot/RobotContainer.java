@@ -1,56 +1,66 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
-import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
+// Subsystem imports
 import frc.robot.subsystems.RomiDrivetrain;
+import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.RollerClaw;
+
+// Command imports
+import frc.robot.commands.AutoCommand;
+import frc.robot.commands.DriveCommand;
+import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.OuttakeCommand;
+import frc.robot.commands.ArmCommand;
+// WPILib imports
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
-/**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and button mappings) should be declared here.
- */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
+  // Controller definition
+  private final CommandXboxController m_controller = new CommandXboxController(0);
+
+  // Subsystem definitions
   private final RomiDrivetrain m_romiDrivetrain = new RomiDrivetrain();
+  private final Arm m_arm = new Arm();
+  private final RollerClaw m_rollerClaw = new RollerClaw();
 
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_romiDrivetrain);
+  // Command definitions
+  private final AutoCommand m_autoCommand = new AutoCommand(m_romiDrivetrain);
 
-  private CommandXboxController m_controller = new CommandXboxController(0);
+  private final DriveCommand m_driveCommand = new DriveCommand(
+    m_romiDrivetrain, // Subsystem
+    () -> m_controller.getLeftY(), // Left joystick Y input supplier (returns speed)
+    () -> m_controller.getLeftX() // Light joystick X input supplier (returns rotation)
+  );
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  private final ArmCommand m_armCommand = new ArmCommand(
+    m_arm, // Subsystem
+    () -> m_controller.getRightY() // Right joystick Y input supplier (returns speed)
+  );
+
+  private final IntakeCommand m_intakeCommand = new IntakeCommand(
+    m_rollerClaw // Subsystem
+  );
+
+  private final OuttakeCommand m_outtakeCommand = new OuttakeCommand(
+    m_rollerClaw // Subsystem
+  );
+ 
   public RobotContainer() {
-
-    m_romiDrivetrain.setDefaultCommand(
-        new RunCommand(() -> m_romiDrivetrain.arcadeDrive(m_controller.getLeftY(), m_controller.getLeftX()), m_romiDrivetrain)
-    );
-
-    // Configure the button bindings
+    m_romiDrivetrain.setDefaultCommand(m_driveCommand);
+    m_arm.setDefaultCommand(m_armCommand);
     configureButtonBindings();
   }
 
-  /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    m_controller.leftBumper().whileTrue(m_intakeCommand);
+    m_controller.rightBumper().whileTrue(m_outtakeCommand);
+  }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
     return m_autoCommand;
   }
 }
