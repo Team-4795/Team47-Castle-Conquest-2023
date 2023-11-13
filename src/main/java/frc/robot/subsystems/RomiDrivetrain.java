@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class RomiDrivetrain extends SubsystemBase {
   private static final double kCountsPerRevolution = 1440.0;
@@ -33,7 +34,7 @@ public class RomiDrivetrain extends SubsystemBase {
     m_rightEncoder.setDistancePerPulse((Math.PI * kWheelDiameterInch) / kCountsPerRevolution);
     resetEncoders();
 
-    // Invert right side since motor is flipped
+    m_diffDrive.setMaxOutput(Constants.maxDriveSpeed);
     m_rightMotor.setInverted(true);
   }
 

@@ -18,6 +18,6 @@ public class DriveCommand extends CommandBase {
 
     @Override
     public void execute() {
-        m_subsystem.arcadeDrive(m_speedSupplier.get(), (-1) * m_rotationSupplier.get());
+        m_subsystem.arcadeDrive((-1) * m_speedSupplier.get(), (-1) * m_rotationSupplier.get());
     }
 }

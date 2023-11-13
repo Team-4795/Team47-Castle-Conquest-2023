@@ -16,6 +16,7 @@ import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.ArmCommand;
 // WPILib imports
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class RobotContainer {

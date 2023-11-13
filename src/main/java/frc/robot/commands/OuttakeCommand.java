@@ -13,6 +13,6 @@ public class OuttakeCommand extends CommandBase {
     
     @Override
     public void execute() {
-        m_subsystem.motorDrive(-1 * Constants.intakeSpeed);
+        m_subsystem.motorDrive(-1 * Constants.maxIntakeSpeed);
     }
 }

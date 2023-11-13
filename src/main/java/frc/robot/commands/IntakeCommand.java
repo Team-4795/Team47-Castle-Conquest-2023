@@ -13,6 +13,6 @@ public class IntakeCommand extends CommandBase {
     
     @Override
     public void execute() {
-        m_subsystem.motorDrive(Constants.intakeSpeed);
+        m_subsystem.motorDrive(Constants.maxIntakeSpeed);
     }
 }

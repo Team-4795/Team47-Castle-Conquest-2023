@@ -30,7 +30,7 @@ public class AutoCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.arcadeDrive(.5, 1);
+    m_subsystem.arcadeDrive(.5, 0);
   }
 
   // Called once the command ends or is interrupted.
