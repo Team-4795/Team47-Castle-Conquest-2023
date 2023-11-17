@@ -29,7 +29,7 @@ public class RobotContainer {
   private final RollerClaw m_rollerClaw = new RollerClaw();
 
   // Command definitions
-  private final AutoCommand m_autoCommand = new AutoCommand(m_romiDrivetrain);
+  private final AutoCommand m_autoCommand = new AutoCommand(m_romiDrivetrain, m_rollerClaw);
 
   private final DriveCommand m_driveCommand = new DriveCommand(
     m_romiDrivetrain, // Subsystem
