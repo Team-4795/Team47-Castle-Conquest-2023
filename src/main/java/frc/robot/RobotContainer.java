@@ -16,6 +16,7 @@ import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.ArmCommand;
 // WPILib imports
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -29,9 +30,9 @@ public class RobotContainer {
   private final RollerClaw m_rollerClaw = new RollerClaw();
 
   // Command definitions
-  private final AutoCommand m_autoCommand = new AutoCommand(m_romiDrivetrain, m_rollerClaw);
+  private AutoCommand m_autoCommand;
 
-  private final DriveCommand m_driveCommand = new DriveCommand(
+  private DriveCommand m_driveCommand = new DriveCommand(
     m_romiDrivetrain, // Subsystem
     () -> m_controller.getLeftY(), // Left joystick Y input supplier (returns speed)
     () -> m_controller.getLeftX() // Light joystick X input supplier (returns rotation)
@@ -62,6 +63,9 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return m_autoCommand;
+    m_autoCommand = new AutoCommand(m_romiDrivetrain, m_arm, m_rollerClaw);
+    return new SequentialCommandGroup(
+      new InstantCommand(m_autoCommand::driveForward).withTimeout(1.5)
+    );
   }
 }

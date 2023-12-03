@@ -4,9 +4,8 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
+import edu.wpi.first.wpilibj.motorcontrol.PWMTalonSRX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -16,13 +15,8 @@ public class RomiDrivetrain extends SubsystemBase {
 
   // The Romi has the left and right motors set to
   // PWM channels 0 and 1 respectively
-  private final PWMVictorSPX m_leftMotor = new PWMVictorSPX(2);
-  private final PWMVictorSPX m_rightMotor = new PWMVictorSPX(3);
-
-  // The Romi has onboard encoders that are hardcoded
-  // to use DIO pins 4/5 and 6/7 for the left and right
-  private final Encoder m_leftEncoder = new Encoder(4, 5);
-  private final Encoder m_rightEncoder = new Encoder(6, 7);
+  private final PWMTalonSRX m_leftMotor = new PWMTalonSRX(2);
+  private final PWMTalonSRX m_rightMotor = new PWMTalonSRX(3);
 
   // Set up the differential drive controller
   private final DifferentialDrive m_diffDrive = new DifferentialDrive(m_leftMotor, m_rightMotor);
@@ -30,12 +24,11 @@ public class RomiDrivetrain extends SubsystemBase {
   /** Creates a new RomiDrivetrain. */
   public RomiDrivetrain() {
     // Use inches as unit for encoder distances
-    m_leftEncoder.setDistancePerPulse((Math.PI * kWheelDiameterInch) / kCountsPerRevolution);
-    m_rightEncoder.setDistancePerPulse((Math.PI * kWheelDiameterInch) / kCountsPerRevolution);
     resetEncoders();
 
-    m_diffDrive.setMaxOutput(Constants.maxDriveSpeed);
     m_rightMotor.setInverted(true);
+
+    m_diffDrive.setMaxOutput(Constants.maxDriveSpeed);
   }
 
   public void arcadeDrive(double xaxisSpeed, double zaxisRotate) {
@@ -43,16 +36,7 @@ public class RomiDrivetrain extends SubsystemBase {
   }
 
   public void resetEncoders() {
-    m_leftEncoder.reset();
-    m_rightEncoder.reset();
-  }
-
-  public double getLeftDistanceInch() {
-    return m_leftEncoder.getDistance();
-  }
-
-  public double getRightDistanceInch() {
-    return m_rightEncoder.getDistance();
+  
   }
 
   @Override

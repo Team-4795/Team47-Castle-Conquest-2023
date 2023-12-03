@@ -5,43 +5,40 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.RollerClaw;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.RomiDrivetrain;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
 public class AutoCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final RomiDrivetrain m_drivetrain;
-  private final RollerClaw rollerClaw;
-  private double startTime;
+  private final Arm m_arm;
+  private final RollerClaw m_rollerClaw;
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public AutoCommand(RomiDrivetrain subsystem, RollerClaw intake) {
-    m_drivetrain = subsystem;
-    rollerClaw = intake;
+  public AutoCommand(RomiDrivetrain drivetrain, Arm arm, RollerClaw claw) {
+    m_drivetrain = drivetrain;
+    m_arm = arm;
+    m_rollerClaw = claw;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem, intake);
+    addRequirements(drivetrain, arm, claw);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    startTime = Timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    if((Timer.getFPGATimestamp() - startTime) > 5){
-      m_drivetrain.arcadeDrive(0.25, 0);  
-    } else {
-      rollerClaw.motorDrive(-1);
-    }
-    
+  public void driveForward() {
+    m_drivetrain.arcadeDrive(1, 0);
+  }
+  public void driveBackward() {
+    m_drivetrain.arcadeDrive(-.5, 0);
   }
 
   // Called once the command ends or is interrupted.
